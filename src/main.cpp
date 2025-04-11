@@ -120,12 +120,12 @@ int main() {
                     short unit_choice;
                     
                     wcout << GREEN << L"Unit Configuration:" << RESET << endl;
-                    wcout << L"No unit\t\t\t" << YELLOW << L"[1]" << RESET << endl;
-                    wcout << L"Millimeters\t\t" << YELLOW << L"[2]" << RESET << endl;
-                    wcout << L"Centimeters\t\t" << YELLOW << L"[3]" << RESET << endl;
-                    wcout << L"Decimeters\t\t" << YELLOW << L"[4]" << RESET << endl;
-                    wcout << L"Meters\t\t\t" << YELLOW << L"[5]" << RESET << endl;
-                    wcout << L"Return to main menu\t" << YELLOW << L"[0]" << RESET << endl;
+                    wcout << L"-No unit\t\t" << YELLOW << L"[1]" << RESET << endl;
+                    wcout << L"-Millimeters\t\t" << YELLOW << L"[2]" << RESET << endl;
+                    wcout << L"-Centimeters\t\t" << YELLOW << L"[3]" << RESET << endl;
+                    wcout << L"-Decimeters\t\t" << YELLOW << L"[4]" << RESET << endl;
+                    wcout << L"-Meters\t\t\t" << YELLOW << L"[5]" << RESET << endl;
+                    wcout << L"-Return to main menu\t" << YELLOW << L"[0]" << RESET << endl;
                     wcout << CYAN << L"Selection: " << PINK;
 
                     wcin >> unit_choice;

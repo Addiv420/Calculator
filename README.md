@@ -21,15 +21,16 @@ A C++ CLI application for calculating geometric properties with unit conversion 
 - **Persistent Settings**  
   Maintains unit preference between calculations
 
-## GitHub Project Description
-`📐 A C++ CLI geometry calculator with unit conversion and playful input validation. Created for educational purposes. Features ANSI colors, error resilience, and measurement prefixes.`
+## Installation & Usage
+For Linux:
+1. Compile with provided script:
+   ```bash
+   chmod +x compile.sh
+   ./compile.sh
 
-## Installation
+For Windows:
+1. Good luck, I still don't know.
 
 ### Requirements
 - C++17 compiler
 - Linux/Windows terminal with UTF-8 support
-
-### Linux
-```bash
-g++ -o geometry_calculator main.cpp -std=c++17
