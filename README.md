@@ -2,7 +2,7 @@
 
 A C++ CLI application for calculating geometric properties with unit conversion capabilities. Developed as a school assignment to demonstrate OOP principles and robust input handling.
 
-![CLI Demo](https://via.placeholder.com/600x300.png?text=Geometry+Calculator+Demo) *Example screenshot placeholder*
+![CLI Demo](https://github.com/Addiv420/Calculator/blob/main/Screenshots/kitty.png) *Screenshot of Kitty Terminal using Addivs Pink theme running the Programm*
 
 ## Features
 
