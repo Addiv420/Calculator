@@ -1,4 +1,4 @@
-﻿//header - imports important function
+﻿// Standard library headers
 #include <iostream>
 #include <string>
 #include <locale>
@@ -6,10 +6,10 @@
 #include <cmath>
 #include <cstdlib>
 
-//Auto std
+// Namespace declaration
 using namespace std;
 
-//Colors
+// ANSI color codes
 #define RESET   "\033[0m"
 #define RED     "\033[38;5;196m"
 #define GREEN   "\033[38;5;28m"
@@ -20,211 +20,142 @@ using namespace std;
 #define CYAN    "\033[38;5;51m"
 #define WHITE   "\033[38;5;255m"
 
-//fallback function: Prevents infinite loop if user tries to put in a char into a int and gives out a funny message after 5 failed attempts.
-void fallback(short &failCount) {
-	wcin.clear();
-	wcin.ignore(numeric_limits<streamsize>::max(), '\n');
-	failCount++;
-	if (failCount <= 5) {
-		wcout << YELLOW << L"Hey! Nicht das Programm kaputt machen" << RESET << RED << "	>:( \a" << RESET << endl << endl;
-	} else if (failCount > 5 && failCount < 8) {
-		wcout << BLUE << L"Willst du mich etwa ärgern?" << RESET << PINK << "	:3 \a" << RESET << endl << endl;
-	} else if (failCount >= 8) {
-		wcout << RED << L"Jetzt Reichts! >:O\a" << RESET << endl << endl;
-		exit(50);
-	}
+// Input validation helper: Prevents infinite loops on invalid input
+void input_fallback(short &attempt_count) {
+    wcin.clear();
+    wcin.ignore(numeric_limits<streamsize>::max(), '\n');
+    attempt_count++;
+    
+    if (attempt_count <= 5) {
+        wcout << YELLOW << L"Hey! Don't break the program" << RESET << RED << " >:( \a" << RESET << endl << endl;
+    } else if (attempt_count > 5 && attempt_count < 8) {
+        wcout << BLUE << L"Are you trying to annoy me?" << RESET << PINK << " :3 \a" << RESET << endl << endl;
+    } else if (attempt_count >= 8) {
+        wcout << RED << L"Enough! Aborting... >:O\a" << RESET << endl << endl;
+        exit(EXIT_FAILURE);
+    }
 }
 
-//main function
-int main()
-{
-//initialization, put in before the loop so it don't reset:
+int main() {
+    // Initialize runtime environment
+    system("clear");
+    wcout << RESET;
+    
+    // UTF-8 locale configuration
+    setlocale(LC_ALL, "en_US.UTF-8");
+    locale::global(locale(""));
 
-	//Clearing messages in terminal
-	system("clear");
+    // Measurement units configuration
+    const wstring prefixes[] = { L"", L"mm", L"cm", L"dm", L"m" };
+    short unit_prefix = 0;
+    const double pi = M_PI;
+    short error_count = 0;
 
-	//Default color
-	wcout << RESET;
+    // Main application loop
+    while (true) {
+        short operation_choice;
+        
+        // Display main menu
+        wcout << L"Select an operation:" << endl;
+        wcout << L"-Calculate cuboid volume\t" << YELLOW << L"[1]" << RESET << endl;
+        wcout << L"-Calculate circle circumference\t" << YELLOW << L"[2]" << RESET << endl;
+        wcout << L"-Configure measurement units\t" << YELLOW << L"[3]" << RESET << endl;
+        wcout << L"-Exit program\t\t\t" << YELLOW << L"[0]" << RESET << endl;
+        wcout << CYAN << L"Selection: " << PINK;
 
-	//8-Bit encoder
-	setlocale(LC_ALL, "en_US.UTF-8");
-	locale::global(locale(""));
+        wcin >> operation_choice;
+        wcout << RESET << endl;
 
-	//array with prefixes
-	wstring prefixes[] = { L"", L"mm", L"cm", L"dm", L"M" };
+        if (wcin.fail()) {
+            input_fallback(error_count);
+            continue;
+        }
 
-	//prefix number which is then put into the [] of the prefixes array
-	short prefix = 0;
+        // Operation handling
+        switch(operation_choice) {
+            case 1: { // Cuboid volume calculation
+                double length, width, height;
+                
+                while (true) {
+                    wcout << L"Enter cuboid length: ";
+                    wcin >> length;
+                    if (wcin.fail()) { input_fallback(error_count); continue; }
+                    
+                    wcout << L"Enter cuboid width: ";
+                    wcin >> width;
+                    if (wcin.fail()) { input_fallback(error_count); continue; }
+                    
+                    wcout << L"Enter cuboid height: ";
+                    wcin >> height;
+                    if (wcin.fail()) { input_fallback(error_count); continue; }
 
-	//pi definition
-	double pi = M_PI;
+                    wcout << L"Result: " << GREEN 
+                          << length * width * height 
+                          << RESET << L" " << YELLOW 
+                          << prefixes[unit_prefix] << RESET << endl << endl;
+                    break;
+                }
+                break;
+            }
+            
+            case 2: { // Circle circumference calculation
+                double radius;
+                
+                while (true) {
+                    wcout << L"Enter circle radius: ";
+                    wcin >> radius;
+                    if (wcin.fail()) { input_fallback(error_count); continue; }
 
-	//misc
-	short failCount = 0;
+                    wcout << L"Result: " << GREEN 
+                          << 2 * pi * radius 
+                          << RESET << L" " << YELLOW 
+                          << prefixes[unit_prefix] << RESET << endl << endl;
+                    break;
+                }
+                break;
+            }
+            
+            case 3: { // Unit configuration
+                while (true) {
+                    short unit_choice;
+                    
+                    wcout << GREEN << L"Unit Configuration:" << RESET << endl;
+                    wcout << L"No unit\t\t\t" << YELLOW << L"[1]" << RESET << endl;
+                    wcout << L"Millimeters\t\t" << YELLOW << L"[2]" << RESET << endl;
+                    wcout << L"Centimeters\t\t" << YELLOW << L"[3]" << RESET << endl;
+                    wcout << L"Decimeters\t\t" << YELLOW << L"[4]" << RESET << endl;
+                    wcout << L"Meters\t\t\t" << YELLOW << L"[5]" << RESET << endl;
+                    wcout << L"Return to main menu\t" << YELLOW << L"[0]" << RESET << endl;
+                    wcout << CYAN << L"Selection: " << PINK;
 
-	//Infite loop, till user exits
-	while (true) {
+                    wcin >> unit_choice;
+                    wcout << RESET << endl;
 
-		//number to select where to enter, put into the loop so it don't infinite loop
-		short operationNumber;
-		
-		//Start TUI
-		wcout << L"Was möchtest du berechnen?" << endl;
-		wcout << L"Volumen eines " << YELLOW << L"Quaders" << RESET << L"		[1]" << endl;
-		wcout << L"Umfang eines " << YELLOW << L"Kreises" << RESET << L"		[2]" << endl;
-		wcout << L"Einstellungen: " << YELLOW << L"Präfix" << RESET << L"		[3]" << endl;
-		wcout << L"Programm " << YELLOW << L"Schließen" << RESET << L"		[0]" << endl;
-		wcout << CYAN << L"Eingabe: " << PINK;
+                    if (wcin.fail()) {
+                        input_fallback(error_count);
+                        continue;
+                    }
 
-		//selection input
-		wcin >> operationNumber;
-		wcout << RESET << endl;
-
-		if (wcin.fail()) {
-			fallback(failCount);
-			continue;
-		}
-
-		//if number 1, then enter cuboid calculator
-		else if (operationNumber == 1) {
-			//initialization of the values of the cuboid
-			double cuboidLength = 0;
-			double cuboidWidth = 0;
-			double cuboidHight = 0;
-
-			//loop for cuboid calculator
-			while (true) {
-				//Asking for input (cuboid length), then validating it
-				wcout << L"Geben Sie die Länge des Quaders ein: ";
-				wcin >> cuboidLength;
-				if (wcin.fail()) {
-					fallback(failCount);
-					continue;
-				}
-				
-				//Same thing just with the width
-				wcout << L"Geben Sie die Breite des Quaders ein: ";
-				wcin >> cuboidWidth;
-				if (wcin.fail()) {
-					fallback(failCount);
-					continue;
-				}
-
-				//This time with the hight
-				wcout << L"Geben Sie die Höhe des Quaders ein: ";
-				wcin >> cuboidHight;
-				if (wcin.fail()) {
-					fallback(failCount);
-					continue;
-				}
-				
-				//initializing result
-				double cuboidResult = 0;
-
-				//Calculating result
-				cuboidResult = cuboidLength * cuboidWidth * cuboidHight;
-
-				//Outputting the result
-				wcout << L"Das Ergebniss ist: " << GREEN << cuboidResult << RESET; wcout << " "; wcout << YELLOW << prefixes[prefix] << RESET << endl << endl;
-				break;
-			}
-		}
-
-		//circumference of a circle
-		else if (operationNumber == 2) {
-			double circleRadius = 0;
-
-			//Loop for if users input fails
-			while (true) {
-				wcout << L"Geben Sie den Radius des Kreises ein: ";
-				wcin >> circleRadius;
-				if (wcin.fail()) {
-					fallback(failCount);
-					continue;
-				}
-
-				//Initializing result
-				double circleResult = 0;
-
-				//Calculating result
-				circleResult = 2 * pi * circleRadius;
-
-				//Outputting result
-				wcout << L"Das Ergebniss ist: " << GREEN << circleResult << RESET; wcout << L" "; wcout << YELLOW << prefixes[prefix] << RESET << endl << endl;
-				break;
-			}
-		}
-
-		else if (operationNumber == 3) {
-			while (true) {
-				short settingsNumber = 0;
-
-				//Prefix settings TUI
-				wcout << GREEN << L"Präfix Einstellungen:" << RESET << endl;
-				wcout << L"Setze präfix auf " << YELLOW << L"Leer" << RESET << L"		[1]" << endl;
-				wcout << L"Setze präfix auf " << YELLOW << L"Millimeter" << RESET << L"	[2]" << endl;
-				wcout << L"Setze präfix auf " << YELLOW << L"Zentimeter" << RESET << L"	[3]" << endl;
-				wcout << L"Setze präfix auf " << YELLOW << L"Dezimeter" << RESET << L"	[4]" << endl;
-				wcout << L"Setze präfix auf " << YELLOW << L"Meter" << RESET << L"		[5]" << endl;
-				wcout << L"Einstellungen " << YELLOW << L"schließen" << RESET << L"		[0]" << endl;
-				wcout << CYAN << L"Eingabe: " << PINK;
-
-				wcin >> settingsNumber;
-				wcout << endl;
-				wcout << RESET;
-
-				//Fallback
-				if (wcin.fail()) {
-					fallback(failCount);
-					continue;
-				}
-
-				//Prefix 1 - Empty
-				else if (settingsNumber == 1) {
-					prefix = 0;
-					wcout << L"Das Prefix ist jetzt auf: "; wcout << YELLOW << L"Leer" << RESET << endl << endl;
-				}
-
-				//Prefix 2 - Millimeter
-				else if (settingsNumber == 2) {
-					prefix = 1;
-					wcout << L"Das Prefix ist jetzt auf: "; wcout << YELLOW << L"Millimeter" << RESET << endl << endl;
-				}
-
-				//Prefix 3 - Centimeter
-				else if (settingsNumber == 3) {
-					prefix = 2;
-					wcout << L"Das Prefix ist jetzt auf: "; wcout << YELLOW << L"Zentimeter" << RESET << endl << endl;
-				}
-
-				//Prefix 4 - Dezimeter
-				else if (settingsNumber == 4) {
-					prefix = 3;
-					wcout << L"Das Prefix ist jetzt auf: "; wcout << YELLOW << L"Dezimeter" << RESET << endl << endl;
-				}
-
-				//Prefix 5 - Meter
-				else if (settingsNumber == 5) {
-					prefix = 4;
-					wcout << L"Das Prefix ist jetzt auf: "; wcout << YELLOW << L"Meter" << RESET << endl << endl;
-				}
-
-				//Exit
-				else if (settingsNumber == 0) {
-					break;
-				}
-			}
-		}
-
-		//Exit
-		else if (operationNumber == 0) {
-			return 0;
-		}
-
-		//Error
-		else {
-			wcout << L"Ungültige eingabe." << endl << endl;
-		}
-	}
-	return 1;
+                    // Handle unit selection
+                    if (unit_choice >= 1 && unit_choice <= 5) {
+                        unit_prefix = unit_choice - 1;
+                        wcout << L"Selected unit: " << YELLOW 
+                              << prefixes[unit_prefix] << RESET << endl << endl;
+                    } else if (unit_choice == 0) {
+                        break;
+                    } else {
+                        wcout << RED << L"Invalid unit selection!" << RESET << endl << endl;
+                    }
+                }
+                break;
+            }
+            
+            case 0: // Program exit
+                return 0;
+            
+            default: // Error handling
+                wcout << RED << L"Invalid selection!" << RESET << endl << endl;
+        }
+    }
+    return EXIT_SUCCESS;
 }
